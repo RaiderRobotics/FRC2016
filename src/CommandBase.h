@@ -3,7 +3,7 @@
 
 #include <string>
 #include "Commands/Command.h"
-//#include "Subsystems/ExampleSubsystem.h"
+#include "Subsystems/DriveTrain.h"
 #include "OI.h"
 #include "WPILib.h"
 
@@ -19,7 +19,7 @@ public:
 	CommandBase();
 	static void init();
 	// Create a single static instance of all of your subsystems
-	//static ExampleSubsystem *examplesubsystem;
+	static DriveTrain *drivetrain;
 	static OI *oi;
 };
 
