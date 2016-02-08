@@ -5,12 +5,31 @@
 DriveTrain::DriveTrain() :
 		Subsystem("DriveTrain")
 {
-	leftMotor1 = new CANTalon(RobotMapVars::LEFTMOTORPORT1);
-	leftMotor2 = new CANTalon(RobotMapVars::LEFTMOTORPORT2);
-	rightMotor1 = new CANTalon(RobotMapVars::RIGHTMOTORPORT1);
-	rightMotor2 = new CANTalon(RobotMapVars::RIGHTMOTORPORT2);
+	pLeftFrontMotor = new CANTalon(TALON_LEFT_FRONT_DRIVE);
+	pLeftRearMotor = new CANTalon(TALON_LEFT_REAR_DRIVE);
+	pRightFrontMotor = new CANTalon(TALON_RIGHT_FRONT_DRIVE);
+	pRightRearMotor = new CANTalon(TALON_RIGHT_REAR_DRIVE);
 
-	robot = new RobotDrive(leftMotor1, leftMotor2, rightMotor1, rightMotor2);
+
+	// Assigns the Talons a device to receive feedback from
+	pLeftFrontMotor->SetFeedbackDevice(CANTalon::QuadEncoder);
+	pRightFrontMotor->SetFeedbackDevice(CANTalon::QuadEncoder);
+
+	// Only front motor Talons have encoders
+
+	// Encoder Ticks [SET PHYSICALLY USING DIP SWITCHES]
+	pLeftFrontMotor->ConfigEncoderCodesPerRev(2048);
+	pRightFrontMotor->ConfigEncoderCodesPerRev(2048);
+
+	pLeftFrontUltra = new AnalogInput(ULTRASONIC_LEFTFRONT_ANIPORT);
+
+	pGyro = new AnalogGyro(0);
+
+	// Default sensitivity
+	pGyro->SetSensitivity(0.007);
+	pGyro->Reset();
+
+	pRobot = new RobotDrive(pLeftFrontMotor, pLeftRearMotor, pRightFrontMotor, pRightRearMotor);
 }
 
 void DriveTrain::InitDefaultCommand()
@@ -19,22 +38,48 @@ void DriveTrain::InitDefaultCommand()
 }
 
 void DriveTrain::Drive(Joystick* stick){
-	robot->ArcadeDrive(stick);
+	pRobot->ArcadeDrive(stick);
 }
 
+void DriveTrain::TankDrive(double leftAxis, double rightAxis)
+{
+	pRobot->TankDrive(leftAxis, rightAxis);
+}
 
-//Encoders
-//Roy wants you to be comfused
-int DriveTrain::EncoderValLeft(){
-	double data = leftMotor1->GetPosition();
-	double equation =2.0 * 3.141 * 3.0;
+// Equations for encoders = encoder ticks * (2PIr)
+
+int DriveTrain::GetLeftEncoderValue(){
+	double data = pLeftFrontMotor->GetPosition();
+	double equation = 2.0 * 3.141 * 3.0;
 
 	return data * equation;
 }
 
-int DriveTrain::EncoderValRight(){
-	double data = rightMotor1->GetPosition();
-	double equation =2.0 * 3.141 * 3.0;
+int DriveTrain::GetRightEncoderValue(){
+	double data = pRightFrontMotor->GetPosition();
+	double equation = 2.0 * 3.141 * 3.0;
 
 	return data * equation;
+}
+
+double DriveTrain::GetUltraAt(int presetPort){
+	switch(presetPort){
+		case 5:
+			return pLeftFrontUltra->GetAverageVoltage() * ULTRASONIC_READING_TO_INCH / ULTRASONIC_SCALEFACTOR;
+			break;
+		case 3:
+			//return leftRearUltra->GetAverageVoltage() * ULTRASONIC_READING_TO_INCH / ULTRASONIC_SCALEFACTOR;
+			return 9999.9;
+			break;
+		default:
+			return 9999.9; //impossible value
+	}
+}
+
+double DriveTrain::GetGyro(){
+	return pGyro->GetAngle();
+}
+
+void DriveTrain::ResetGyro(){
+	pGyro->Reset();
 }

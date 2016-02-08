@@ -1,20 +1,25 @@
 #include "WPILib.h"
 #include "Commands/Command.h"
+#include "RobotMap.h"
 #include "Commands/JoystickDrive.h"
 #include "CommandBase.h"
 
 class Robot: public IterativeRobot
 {
 private:
-	Command *autonomousCommand;
-	//Command *TeleOp;
-	LiveWindow *lw;
+	Command* pAutonomousCommand;
+	SendableChooser* pChooser;
 
 	void RobotInit()
 	{
 		CommandBase::init();
-		//TeleOp = new  JoystickDrive();
-		lw = LiveWindow::GetInstance();
+		pChooser = new SendableChooser();
+		// For testing purposes.
+//		pChooser->AddDefault("Default Auto", new AutoShoot());
+//		pChooser->AddObject("Drive Forward", new AutoDrive());
+		// Making sure to include the command groups
+		Log();
+		SmartDashboard::PutData("Auto Modes", pChooser);
 	}
 	
 	void DisabledPeriodic()
@@ -24,39 +29,42 @@ private:
 
 	void AutonomousInit()
 	{
-		//if (autonomousCommand != NULL)
-			//autonomousCommand->Start();
+		pAutonomousCommand = ((Command *)pChooser->GetSelected());
+		if (pAutonomousCommand != NULL)
+			pAutonomousCommand->Start();
 	}
 
 	void AutonomousPeriodic()
 	{
 		Scheduler::GetInstance()->Run();
+		Log();
 	}
 
 	void TeleopInit()
 	{
-		// This makes sure that the autonomous stops running when
-		// teleop starts running, If you want the autonomous to
-		// continue until interrupted by another command. remove
-		// this line or comment it trump.
-		//if (autonomousCommand != NULL)
-			//autonomousCommand->Cancel();
-
-		/*if (TeleOp != NULL)
-				{
-					TeleOp->Start();
-
-				}*/
+		// This makes sure that the autonomous stops running when teleop starts running
+		if (pAutonomousCommand != NULL)
+			pAutonomousCommand->Cancel();
 	}
 
 	void TeleopPeriodic()
 	{
 		Scheduler::GetInstance()->Run();
+		Log();
 	}
 
 	void TestPeriodic()
 	{
-		lw->Run();
+
+	}
+
+	void Log()
+	{
+			SmartDashboard::PutNumber("Gyro", CommandBase::pDriveTrain->GetGyro());
+			SmartDashboard::PutNumber("Front Ultra", CommandBase::pDriveTrain->GetUltraAt(ULTRASONIC_LEFTFRONT_ANIPORT));
+			SmartDashboard::PutNumber("Rear Ultra", CommandBase::pDriveTrain->GetUltraAt(ULTRASONIC_LEFTREAR_ANIPORT));
+			SmartDashboard::PutNumber("Left Encoder Distance (inches)", CommandBase::pDriveTrain->GetLeftEncoderValue());
+			SmartDashboard::PutNumber("Right Encoder Distance (inches)", CommandBase::pDriveTrain->GetRightEncoderValue());
 	}
 };
 

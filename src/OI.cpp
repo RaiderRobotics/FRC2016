@@ -4,5 +4,5 @@
 OI::OI()
 {
 	// Process operator interface input here.
-	stick = new Joystick(RobotMapVars::JOYSTICKPORT);
+	stick = new Joystick(JOYSTICKPORT);
 }
