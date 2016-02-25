@@ -1,13 +1,13 @@
-#ifndef JoystickDrive_H
-#define JoystickDrive_H
+#ifndef ExtendSFM_H
+#define ExtendSFM_H
 
 #include "../CommandBase.h"
 #include "WPILib.h"
 
-class JoystickDrive: public CommandBase
+class ExtendSFM: public CommandBase
 {
 public:
-	JoystickDrive();
+	ExtendSFM();
 	void Initialize();
 	void Execute();
 	bool IsFinished();

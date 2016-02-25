@@ -1,2 +1,2 @@
-# FRC2016
-Official Code for FRC 2016
+# CommandL
+Command Base robot that has the key features of BotOff and CoomandSA, as well as Xbox controller integration. 

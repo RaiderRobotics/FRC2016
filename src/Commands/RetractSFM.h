@@ -1,13 +1,13 @@
-#ifndef JoystickDrive_H
-#define JoystickDrive_H
+#ifndef RetractSFM_H
+#define RetractSFM_H
 
 #include "../CommandBase.h"
 #include "WPILib.h"
 
-class JoystickDrive: public CommandBase
+class RetractSFM: public CommandBase
 {
 public:
-	JoystickDrive();
+	RetractSFM();
 	void Initialize();
 	void Execute();
 	bool IsFinished();

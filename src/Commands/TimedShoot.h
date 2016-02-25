@@ -1,18 +1,21 @@
-#ifndef JoystickDrive_H
-#define JoystickDrive_H
+#ifndef TimedShoot_H
+#define TimedShoot_H
 
 #include "../CommandBase.h"
 #include "WPILib.h"
 
-class JoystickDrive: public CommandBase
+class TimedShoot: public CommandBase
 {
 public:
-	JoystickDrive();
+	TimedShoot();
+	TimedShoot(double displacement);
 	void Initialize();
 	void Execute();
 	bool IsFinished();
 	void End();
 	void Interrupted();
+private:
+	double displacement;
 };
 
 #endif

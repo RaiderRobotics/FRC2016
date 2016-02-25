@@ -5,6 +5,7 @@
 #include "Commands/Command.h"
 #include "Subsystems/DriveTrain.h"
 #include "Subsystems/BIOS.h"
+#include "SubSystems/SFM.h"
 #include "OI.h"
 #include "WPILib.h"
 
@@ -22,6 +23,7 @@ public:
 	// Create a single static instance of all of your subsystems
 	static DriveTrain* pDriveTrain;
 	static BIOS* pBIOS;
+	static SFM* pSFM;
 	static OI* pOI;
 };
 

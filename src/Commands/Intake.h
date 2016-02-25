@@ -1,13 +1,13 @@
-#ifndef JoystickDrive_H
-#define JoystickDrive_H
+#ifndef TimedIntake_H
+#define TimedIntake_H
 
 #include "../CommandBase.h"
 #include "WPILib.h"
 
-class JoystickDrive: public CommandBase
+class Intake: public CommandBase
 {
 public:
-	JoystickDrive();
+	Intake();
 	void Initialize();
 	void Execute();
 	bool IsFinished();

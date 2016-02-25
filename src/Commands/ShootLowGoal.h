@@ -1,13 +1,13 @@
-#ifndef JoystickDrive_H
-#define JoystickDrive_H
+#ifndef ShootLowGoal_H
+#define ShootLowGoal_H
 
 #include "../CommandBase.h"
 #include "WPILib.h"
 
-class JoystickDrive: public CommandBase
+class ShootLowGoal: public CommandBase
 {
 public:
-	JoystickDrive();
+	ShootLowGoal();
 	void Initialize();
 	void Execute();
 	bool IsFinished();

@@ -1,13 +1,13 @@
-#ifndef JoystickDrive_H
-#define JoystickDrive_H
+#ifndef RumbleInRange_H
+#define RumbleInRange_H
 
 #include "../CommandBase.h"
 #include "WPILib.h"
 
-class JoystickDrive: public CommandBase
+class RumbleInRange: public CommandBase
 {
 public:
-	JoystickDrive();
+	RumbleInRange();
 	void Initialize();
 	void Execute();
 	bool IsFinished();

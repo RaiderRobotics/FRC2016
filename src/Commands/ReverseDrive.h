@@ -1,13 +1,13 @@
-#ifndef JoystickDrive_H
-#define JoystickDrive_H
+#ifndef ReverseDrive_H
+#define ReverseDrive_H
 
 #include "../CommandBase.h"
 #include "WPILib.h"
 
-class JoystickDrive: public CommandBase
+class ReverseDrive: public CommandBase
 {
 public:
-	JoystickDrive();
+	ReverseDrive();
 	void Initialize();
 	void Execute();
 	bool IsFinished();

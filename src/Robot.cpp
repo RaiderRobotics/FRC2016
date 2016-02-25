@@ -2,24 +2,28 @@
 #include "Commands/Command.h"
 #include "RobotMap.h"
 #include "Commands/JoystickDrive.h"
+#include "Commands/AutoSequenceOne.h"
+#include "Commands/AutoSequenceTwo.h"
 #include "CommandBase.h"
 
 class Robot: public IterativeRobot
 {
 private:
 	Command* pAutonomousCommand;
-	SendableChooser* pChooser;
 
 	void RobotInit()
 	{
 		CommandBase::init();
-		pChooser = new SendableChooser();
-		// For testing purposes.
-//		pChooser->AddDefault("Default Auto", new AutoShoot());
-//		pChooser->AddObject("Drive Forward", new AutoDrive());
-		// Making sure to include the command groups
+		if(CommandBase::pDriveTrain->GetSwitchPositionOne() == true && CommandBase::pDriveTrain->GetSwitchPositionTwo() == false) {
+			pAutonomousCommand = new AutoSequenceOne();
+			CommandBase::pDriveTrain->LightLED();
+		}
+
+		if(CommandBase::pDriveTrain->GetSwitchPositionOne() == false && CommandBase::pDriveTrain->GetSwitchPositionTwo() == true) {
+			pAutonomousCommand = new AutoSequenceTwo();
+		}
 		Log();
-		SmartDashboard::PutData("Auto Modes", pChooser);
+		//SmartDashboard::PutNumber("Auto Mode", pChooser);
 	}
 	
 	void DisabledPeriodic()
@@ -29,7 +33,7 @@ private:
 
 	void AutonomousInit()
 	{
-		pAutonomousCommand = ((Command *)pChooser->GetSelected());
+		//CommandBase::pDriveTrain->ResetGyro();
 		if (pAutonomousCommand != NULL)
 			pAutonomousCommand->Start();
 	}
@@ -61,8 +65,11 @@ private:
 	void Log()
 	{
 			SmartDashboard::PutNumber("Gyro", CommandBase::pDriveTrain->GetGyro());
-			SmartDashboard::PutNumber("Front Ultra", CommandBase::pDriveTrain->GetUltraAt(ULTRASONIC_LEFTFRONT_ANIPORT));
-			SmartDashboard::PutNumber("Rear Ultra", CommandBase::pDriveTrain->GetUltraAt(ULTRASONIC_LEFTREAR_ANIPORT));
+			SmartDashboard::PutBoolean("IsSwitchOne", CommandBase::pDriveTrain->GetSwitchPositionOne());
+			SmartDashboard::PutBoolean("IsSwitchTwo", CommandBase::pDriveTrain->GetSwitchPositionTwo());
+			SmartDashboard::PutBoolean("IsSwitchThree", CommandBase::pDriveTrain->GetSwitchPositionThree());
+			SmartDashboard::PutBoolean("IsSwitchFour", CommandBase::pDriveTrain->GetSwitchPositionFour());
+			SmartDashboard::PutNumber("Front Ultra", CommandBase::pBIOS->GetUltraAt(ULTRASONIC_FRONT_ANIPORT));
 			SmartDashboard::PutNumber("Left Encoder Distance (inches)", CommandBase::pDriveTrain->GetLeftEncoderValue());
 			SmartDashboard::PutNumber("Right Encoder Distance (inches)", CommandBase::pDriveTrain->GetRightEncoderValue());
 	}
